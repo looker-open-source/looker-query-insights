@@ -35,6 +35,13 @@ module.exports = (api) => {
           modules: false,
         },
       ],
+      [
+        "@babel/preset-env",
+        {
+          useBuiltIns: "usage",
+          corejs: 3,
+        },
+      ],
     ],
     env: {
       build: {

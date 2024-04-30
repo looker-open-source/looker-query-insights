@@ -15,10 +15,14 @@
     "node": ">=16"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.9.0",
     "@looker/extension-sdk": "^22.20.1",
     "@looker/sdk": "^22.20.1",
     "@looker/sdk-rtl": "^21.5.0",
-    "vue": "^3.4.21"
+    "panzoom": "^9.4.3",
+    "vue-draggable-resizable": "^3.0.0",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.0",

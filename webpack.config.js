@@ -58,11 +58,11 @@ module.exports = {
         ],
       },
       {
-        test: /\.(js)$/,
+        test: /\.js$/,
         loader: "babel-loader",
         exclude: /node_modules/,
         include: /src/,
-        sideEffects: false,
+        // sideEffects: false,
       },
       {
         test: /\.(png|jpg|gif|svg)$/i,

@@ -1,16 +1,17 @@
+<script setup>
+import { ref, computed } from "vue";
 
+const count = ref(0);
+
+function inc() {
+  console.log(count.value)
+  count.value++
+}
+</script>
 
 <template>
   <button @click="inc">{{ count }}</button>
 </template>
-
-<script setup>
-import Button from "./Button.vue"
-import { ref, computed } from "vue";
-
-const count = ref(0);
-computed(() => count.value++)
-</script>
 
 <style scoped>
 button {

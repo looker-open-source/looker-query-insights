@@ -26,16 +26,35 @@ import {
   connectExtensionHost,
   LookerExtensionSDK40,
 } from '@looker/extension-sdk'
+import './index.css'
 import App from './App.vue'
+import Home from './views/Home.vue'
+import LLM from './views/LLM.vue'
 import { createApp } from 'vue'
+import { createMemoryHistory, createWebHistory, createRouter } from 'vue-router'
+import VueDraggableResizable from 'vue-draggable-resizable'
 
-// ;(async () => {
-  // const extensionSdk = await connectExtensionHost()
-  // const sdk = LookerExtensionSDK40.createClient(extensionSdk)
+;(async () => {
+  const routes = [
+    { path: '/', component: Home },
+    { path: '/erd-to-lookml', component: LLM }
+  ]
+
+  const router = createRouter({
+    history: createMemoryHistory(),
+    routes,
+  })
+
+  const extensionSdk = await connectExtensionHost()
+  const sdk = LookerExtensionSDK40.createClient(extensionSdk)
   const root = document.createElement('div')
   root.id = "app"
   root.style.height = '100%'
+  root.style.width = '100%'
+  root.style.position = 'fixed'
   document.body.appendChild(root)
-  createApp(App).mount('#app')
-    // , { extensionSdk, sdk }
-// })()
+  const app = createApp(App, {extensionSdk, sdk})
+  app.use(router)
+  app.component("vue-draggable-resizable", VueDraggableResizable)
+  app.mount('#app')
+})()
