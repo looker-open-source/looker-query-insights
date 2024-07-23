@@ -1,11 +1,16 @@
 :root {
+    --color-background: white;
+    --color-header: black;
+    --color-text: black;
+    --color-card: white;
+    --color-shadow: grey;
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
   
-    color-scheme: light dark;
+    /* color-scheme: light dark; */
     /* color: rgba(255, 255, 255, 0.87); */
-    background-color: #242424;
+    background-color: var(--color-background);
   
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -26,5 +31,73 @@ body {
     color: #535bf2;
   }
   h1, h2, h3 {
-    color:#242424;
+    color:var(--color-header);
+  }
+  .tweet-container {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 16px;
+    background-color: var(--color-card);
+    border-radius: 12px;
+    transition: box-shadow 0.3s ease-in-out;
+    box-shadow: 0 1px 3px var(--color-shadow);
+  }
+  
+  .tweet-content {
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--color-text);
+    overflow-wrap: break-word;
+    text-align: left;
+  }
+  
+  .tweet-content p {
+    margin-bottom: 12px;
+  }
+  
+  .tweet-content a {
+    color: #1da1f2;
+    text-decoration: none;
+  }
+  
+  .tweet-content a:hover {
+    text-decoration: underline;
+  }
+  
+  .tweet-content img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-top: 10px;
+  }
+  
+  .tweet-content ul, .tweet-content ol {
+    margin-left: 20px;
+    margin-bottom: 12px;
+    padding-left: 0;
+  }
+  
+  .tweet-content blockquote {
+    border-left: 4px solid #1da1f2;
+    margin-left: 0;
+    padding-left: 12px;
+    color: #657786;
+  }
+  
+  .tweet-content code {
+    background-color: #f5f8fa;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  
+  .tweet-content h1, .tweet-content h2, .tweet-content h3, 
+  .tweet-content h4, .tweet-content h5, .tweet-content h6 {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  .tweet-content * {
+    text-align: left;
   }

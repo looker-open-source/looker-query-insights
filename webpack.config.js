@@ -24,6 +24,10 @@
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin
 const fs = require("fs");
 const path = require("path");
+const { DefinePlugin } = require('webpack');
+const webpack = require('webpack')
+
+const envVars = require('dotenv').config({ path: '.env' }).parsed || {};
 
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
@@ -79,5 +83,6 @@ module.exports = {
       analyzerMode: process.env.ANALYZE_MODE || "disabled",
     }),
     new VueLoaderPlugin(),
+    new webpack.EnvironmentPlugin(Object.keys(envVars))
   ],
 };

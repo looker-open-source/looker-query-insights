@@ -1,51 +1,90 @@
 <script setup>
-import { defineComponent } from 'vue'
+import { inject, watch, ref, onMounted, onUnmounted } from 'vue';
+import Message from './Message.vue';
+import { useLookerVertexMessage } from './composables/useLookerVertexMessage';
+import { vizConfigSettings } from './constants';
+import { stringToHash, extractNestedValuesGenerator } from './utils';
 
-import Button from './components/Button.vue'
-import LeftBanner from './components/LeftBanner.vue'
+const vizConfig = inject('vizConfig');
+const extensionSdk = inject('extensionSdk');
+const sdk = inject('sdk');
+const dataHash = ref(null);
+const settingsLoaded = ref(false);
+const { sendMessage, loading, results } = useLookerVertexMessage(sdk);
 
+onMounted(() => {
+  extensionSdk.visualizationSDK.configureVisualization(vizConfigSettings);
+  settingsLoaded.value = true;
+});
+
+onUnmounted(() => {
+  settingsLoaded.value = false;
+});
+
+watch(() => vizConfig.value, (newVizConfig) => {
+  if (!settingsLoaded.value || !newVizConfig) return;
+
+  const { queryResponse, visConfig } = newVizConfig;
+  if (!queryResponse || !visConfig) return;
+
+  const { data, fields } = queryResponse;
+  if (!data || data.length === 0) return;
+
+  const newDataHash = stringToHash(visConfig.prompt + JSON.stringify(data));
+  if (newDataHash === dataHash.value) return;
+
+  dataHash.value = newDataHash;
+
+  const { dimensions, measures, pivots, table_calculations } = fields;
+  const queryMetadata = {
+    dimensions: dimensions?.map(d => ({ field: d.name, label: d.label, description: d.description })),
+    measures: measures?.map(d => ({ field: d.name, label: d.label, description: d.description })),
+    pivots,
+    tableCalculations: table_calculations
+  };
+
+  sendMessage(
+    queryMetadata,
+    extractNestedValuesGenerator(data),
+    visConfig.prompt ?? 'summarize',
+    visConfig.temperature ?? 0.2,
+    visConfig.query ?? ''
+  );
+}, { deep: true });
+
+watch(() => vizConfig.value?.visConfig, (newVisConfig) => {
+  if (!newVisConfig) return;
+
+  const { headerColor, backgroundColor, textColor, shadowColor, cardColor } = newVisConfig;
+  const root = document.documentElement.style;
+  root.setProperty('--color-background', backgroundColor);
+  root.setProperty('--color-header', headerColor);
+  root.setProperty('--color-card', cardColor);
+  root.setProperty('--color-text', textColor);
+  root.setProperty('--color-shadow', shadowColor);
+}, { deep: true });
 </script>
 
 <template>
-  <div class="dot-grid-background"></div>
-  <div class="webpage">
-    <div class="column-flex">
-      <router-view v-slot="{ Component }">
-        <transition name="fade">
-          <component :is="Component" />
-        </transition>
-      </router-view>
-    </div>
+  <div v-if="!loading && vizConfig">
+    <Message :message="results" />
   </div>
+  <span v-else>Loading Insights...</span>
 </template>
 
 <style>
 body {
-  font-family: -apple-system, system-ui, BlinkMacSystemFont;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, sans-serif;
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
-.webpage {
-  display:flex;
-  flex-direction: row;
-  justify-content:space-evenly;
-}
 
-.column-flex {
-  display:flex;
-  flex-direction:column;
-  width:100%;
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80%;
+  width: 80%;
 }
-
-.dot-grid-background {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1;
-    background-color: #fff;
-    background-image: radial-gradient(circle, rgba(100, 117, 139, .5) 1px, transparent 1px);
-    background-size: 25px 25px;
-  }
 </style>
