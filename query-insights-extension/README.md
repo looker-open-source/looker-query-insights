@@ -41,7 +41,7 @@ This section describes how to set up the LLM Integration for the Query Insights.
    cd query-insights-extension
    ```
 
-1. Install the dependencies with [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm). *Please follow the hyperlinked directions for installing node and npm on your machine. Skip this step if deploying from Cloud Shell method above.* Additionally if you need to work across multiple Node versions, `nvm` can be used switch between and install different node versions.
+2. Install the dependencies with [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm). *Please follow the hyperlinked directions for installing node and npm on your machine. Skip this step if deploying from Cloud Shell method above.* Additionally if you need to work across multiple Node versions, `nvm` can be used switch between and install different node versions.
 
    ```bash
    npm install
@@ -49,9 +49,9 @@ This section describes how to set up the LLM Integration for the Query Insights.
 
    > You may need to update your Node version or use a [Node version manager](https://github.com/nvm-sh/nvm) to change your Node version.
 
-2. Create a new BigQuery connection in Looker that will allow us to get the examples from the database. You will use that in the VERTEX_BIGQUERY_LOOKER_CONNECTION_NAME below.
+3. Create a new BigQuery connection in Looker that will allow us to get the examples from the database. You will use that in the VERTEX_BIGQUERY_LOOKER_CONNECTION_NAME below.
 
-3. Ensure all the appropriate environment variables are set in the `.env` file
+4. Ensure all the appropriate environment variables are set in the `.env` file. There is a .env-examples files in the looker-explore-assitant package, you can edit it and save as .env. 
 
    Regardless of the backend, you're going to need:
 
@@ -65,7 +65,7 @@ This section describes how to set up the LLM Integration for the Query Insights.
    VERTEX_BIGQUERY_MODEL_ID=<This is the model id that you want to use for prediction>
    ```
 
-4. Start the development server (Skip this step if you aren't changing the UI code, and proceed to the next step then deployment)
+5. Start the development server (**Skip this step if you aren't changing the UI code, and proceed to the next step then to deployment**)
    **IMPORTANT** If you are running the extension from a VM or another remote machine, you will need to Port Forward to the machine where you are accessing the Looker Instance from (ie. If you are accessing Looker from your local machine, run the following command there.). Here's a boilerplate example for port forwarding the remote port 8080 to the local port 8080:
    `ssh username@host -L 8080:localhost:8080`.
 
@@ -75,7 +75,9 @@ This section describes how to set up the LLM Integration for the Query Insights.
 
    Great! Your extension is now running and serving the JavaScript at https://localhost:8080/bundle.js.
 
-6. Now log in to Looker and create a new project or use an existing project.
+## 3. Looker Extension LookML Project Setup
+
+1. Now log in to Looker and create a new project or use an existing project.
 
    This is found under **Develop** => **Manage LookML Projects** => **New LookML Project**.
 
@@ -83,8 +85,7 @@ This section describes how to set up the LLM Integration for the Query Insights.
 
    1. In your copy of the extension project you have a `manifest.lkml` file.
 
-   You can either drag & upload this file into your Looker project, or create a `manifest.lkml` with the same content. Change the `id`, `label`, or `url` as needed. 
-   **IMPORTANT** please paste in the deployed Cloud Function URL into the `external_api_urls` list and uncomment that line if you are using the Cloud Function backend deployment. This will allowlist it in Looker for fetch requests.
+   You can either drag & upload this file into your Looker project, or create a `manifest.lkml` with the same content. Change the `id`, `label`, or `url` as needed.  Your manifest.lkml file should look like the below examples.
 
    ```lookml
    application: query_insights {
@@ -100,32 +101,34 @@ This section describes how to set up the LLM Integration for the Query Insights.
       new_window_external_urls: ["https://developers.generativeai.google/*"]
       local_storage: yes
     }
-}
+   }
    ```
 
-7. Create a `model` LookML file in your project. The name doesn't matter. The model and connection won't be used, and in the future this step may be eliminated.
+2. Create a `model` LookML file in your project. The name doesn't matter. The model and connection won't be used, and in the future this step may be eliminated.
 
    - Add a connection in this model. It can be any connection, it doesn't matter which.
    - [Configure the model you created](https://docs.looker.com/data-modeling/getting-started/create-projects#configuring_a_model) so that it has access to some connection.
 
-8. Connect your new project to Git. You can do this multiple ways:
+3. Connect your new project to Git. You can do this multiple ways:
 
    - Create a new repository on GitHub or a similar service, and follow the instructions to [connect your project to Git](https://docs.looker.com/data-modeling/getting-started/setting-up-git-connection)
    - A simpler but less powerful approach is to set up git with the "Bare" repository option which does not require connecting to an external Git Service.
 
-9. Commit your changes and deploy your them to production through the Project UI.
+4. Commit your changes and deploy your them to production through the Project UI.
 
-10. Reload the page and click the `Browse` dropdown menu. You should see your extension in the list.
-   - The extension will load the JavaScript from the `url` provided in the `application` definition. By default, this is https://localhost:8080/bundle.js. If you change the port your server runs on in the package.json, you will need to also update it in the manifest.lkml.
-   - Refreshing the extension page will bring in any new code changes from the extension template, although some changes will hot reload.
+5. Reload the page and in the left navigation panel click on the Application drop-down. You should see your extension in the list.
 
-### Deployment
+6. The extension will load the JavaScript from the `url` provided in the `application` definition if running locally OR from the `file` specified if skipping the local development step. By default, this is https://localhost:8080/bundle.js for `url` and `bundle.js` if `file`. If you change the port your server runs on in the package.json, you will need to also update it in the manifest.lkml.
+
+7. Refreshing the extension page will bring in any new code changes from the extension template, although some changes will hot reload.
+
+## 4. Deployment
 
 The process above requires your local development server to be running to load the extension code. To allow other people to use the extension, a production build of the extension needs to be run. As the kitchensink uses code splitting to reduce the size of the initially loaded bundle, multiple JavaScript files are generated.
 
 1. In your extension project directory on your development machine, build the extension by running the command `npm run build`.
-1. Drag and drop the `bundle.js` JavaScript file contained in the `dist` directory into the Looker project interface.
-1. Modify your `manifest.lkml` to use `file` instead of `url` and point it at the `bundle.js` file.
+2. Drag and drop the `bundle.js` JavaScript file contained in the `dist` directory into the Looker project interface.
+3. Modify your `manifest.lkml` to use `file` instead of `url` and point it at the `bundle.js` file.
 
 Note that the additional JavaScript files generated during the production build process do not have to be mentioned in the manifest. These files will be loaded dynamically by the extension as and when they are needed. Note that to utilize code splitting, the Looker server must be at version 7.21 or above.
 

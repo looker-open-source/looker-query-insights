@@ -8,17 +8,18 @@ This Terraform configuration establishes a backend for the Query Insights Extens
 
 - Terraform installed on your machine.
 - Access to a GCP account with permission to create and manage resources.
-- A GCP project where the resources will be deployed.
+- A GCP project & ID where the resources will be deployed.
 
 ## Configuration and Deployment
 
 ### BigQuery Backend
 
 To deploy the BigQuery backend:
+**Replace <PROJECT_ID> in the below script with your GCP project id**
 
 ```bash
 cd terraform 
-export TF_VAR_project_id=XXX
+export TF_VAR_project_id=<PROJECT_ID>
 terraform init
 terraform plan
 terraform apply
@@ -26,7 +27,7 @@ terraform apply
 
 You will have to wait 1-2 minutes for the APIs to turn on. You will also have to wait a couple of minutes for the service account for the BigQuery connection to appear.
 
-If you use the defaults, you can test whether everything is working by running:
+If you use the defaults, you can test whether everything is working and deployed by running:
 
 ```sql
     SELECT ml_generate_text_llm_result AS generated_content
@@ -55,7 +56,7 @@ Also, as part of the BigQuery backend setup, we create the Service Account that 
 
 ## Cleaning Up
 
-To remove all resources created by this Terraform configuration, run:
+To remove all resources created by this Terraform configuration either to start from scratch OR tear down the application, run:
 
 ```sh
 terraform destroy

@@ -60,7 +60,7 @@ In the Explore Visualization config, the LLM tab will allow you to customize the
 
 ### UI Customization
 
-In the Explore Visualization config, the Display tab will allow you to customize the look and feel of the visualization with 7 parameters: theme color, background color, card color, header color, shadown color, text color, and image url
+In the Explore Visualization config, the Display tab will allow you to customize the look and feel of the visualization with 7 parameters: theme color, background color, card color, header color, shadown color, text color, and image url.
 
 ## Acknowledgements
 
