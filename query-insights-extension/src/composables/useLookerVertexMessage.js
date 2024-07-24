@@ -60,8 +60,31 @@ class UtilsHelper {
  * @returns {string} Formatted string of generator values.
  */
 function formatValuesToString(generator) {
-  return Array.from(generator).join('\n');
+  // return Array.from(generator).join('\n');
+  return generator.join('\n')
 }
+
+const truncateDataForLLM = (data, maxRows, tokenLimit, estimateTokens) => {
+  data = Array.from(data)
+  if (data.length <= maxRows) {
+    return data;
+  }
+
+  const halfMax = Math.floor(maxRows / 2);
+  let result = [...data.slice(0, halfMax), ...data.slice(-halfMax)];
+
+  while (estimateTokens(result) > tokenLimit && result.length > 2) {
+    const removeIndex = result.length > halfMax ? result.length - 1 : halfMax;
+    result.splice(removeIndex, 1);
+  }
+  console.log("Summarizing " + result.length + " rows of the result set")
+  return result;
+};
+
+const estimateTokens = (arr) => {
+  // Placeholder implementation
+  return arr.reduce((sum, item) => sum + JSON.stringify(item).length, 0);
+};
 
 /**
  * Composable for handling Looker Vertex messages.
@@ -71,6 +94,8 @@ function formatValuesToString(generator) {
 export const useLookerVertexMessage = (core40SDK) => {
   const loading = ref(false);
   const results = ref();
+  const maxRows = 500;
+  const tokenLimit = 1000000
 
   const VERTEX_BIGQUERY_LOOKER_CONNECTION_NAME = process.env.VERTEX_BIGQUERY_LOOKER_CONNECTION_NAME || '';
   const VERTEX_BIGQUERY_MODEL_ID = process.env.VERTEX_BIGQUERY_MODEL_ID || '';
@@ -137,6 +162,7 @@ export const useLookerVertexMessage = (core40SDK) => {
    */
   const sendMessage = async (fields, data, type, temperature, additionalContext) => {
     loading.value = true;
+    const truncatedData = truncateDataForLLM(data, maxRows, tokenLimit, estimateTokens)
     const contents = `
       Context
       ----------
@@ -167,7 +193,7 @@ export const useLookerVertexMessage = (core40SDK) => {
       Data
       ----------
 
-      ${formatValuesToString(data)}
+      ${formatValuesToString(truncatedData)}
 
       Markdown Formatting Instructions
       ----------

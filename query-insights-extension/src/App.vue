@@ -22,16 +22,17 @@ SOFTWARE. -->
 
 
 <script setup>
-import { inject, watch, ref, onMounted, onUnmounted } from 'vue';
+import { inject, watch, watchEffect, ref, onMounted } from 'vue';
 import Message from './Message.vue';
 import { useLookerVertexMessage } from './composables/useLookerVertexMessage';
 import { vizConfigSettings } from './constants';
-import { extractNestedValuesGenerator } from './utils';
+import { stringToHash, extractNestedValuesGenerator } from './utils';
 
 const vizConfig = inject('vizConfig');
 const extensionSdk = inject('extensionSdk');
 const sdk = inject('sdk');
 const dataChanged = ref(null);
+const dataHash = ref(null);
 const settingsLoaded = ref(false);
 const { sendMessage, loading, results } = useLookerVertexMessage(sdk);
 
@@ -40,16 +41,10 @@ onMounted(() => {
   settingsLoaded.value = true;
 });
 
-onUnmounted(() => {
-  settingsLoaded.value = false;
-  dataChanged.value = null;
-});
+watchEffect(async() =>  {
+  if (!settingsLoaded.value || !vizConfig.value) return;
 
-watch(() => vizConfig.value, (newVizConfig) => {
-  console.log("New: ", newVizConfig)
-  if (!settingsLoaded.value || !newVizConfig) return;
-
-  const { queryResponse, visConfig } = newVizConfig;
+  const { queryResponse, visConfig } = vizConfig.value;
   if (!queryResponse || !visConfig) return;
 
   const { data, fields } = queryResponse;
@@ -61,6 +56,15 @@ watch(() => vizConfig.value, (newVizConfig) => {
   // else (ie. query changed, query run) trigger new call
   dataChanged.value = queryResponse.parent_id
 
+  if(!'tracked_attributes' in queryResponse) return;
+
+  if(queryResponse.tracked_attributes['result.from_cache']) return;
+
+  const newDataHash = stringToHash(visConfig.prompt + visConfig.temperature + visConfig.query +  JSON.stringify(data));
+  if (newDataHash === dataHash.value) return;
+
+  dataHash.value = newDataHash;
+
   const { dimensions, measures, pivots, table_calculations } = fields;
   const queryMetadata = {
     dimensions: dimensions?.map(d => ({ field: d.name, label: d.label, description: d.description })),
@@ -69,6 +73,8 @@ watch(() => vizConfig.value, (newVizConfig) => {
     tableCalculations: table_calculations
   };
 
+  console.log("Query re-run. New Viz config and query: ", vizConfig)
+
   sendMessage(
     queryMetadata,
     extractNestedValuesGenerator(data),
@@ -76,7 +82,7 @@ watch(() => vizConfig.value, (newVizConfig) => {
     visConfig.temperature ?? 0.2,
     visConfig.query ?? ''
   );
-}, { deep: true });
+});
 
 watch(() => vizConfig.value?.visConfig, (newVisConfig) => {
   if (!newVisConfig) return;
