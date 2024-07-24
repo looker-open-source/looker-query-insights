@@ -56,9 +56,13 @@ watchEffect(async() =>  {
   // else (ie. query changed, query run) trigger new call
   dataChanged.value = queryResponse.parent_id
 
-  if(!'tracked_attributes' in queryResponse) return;
+  // console.log(queryResponse)
 
-  if(queryResponse.tracked_attributes['result.from_cache']) return;
+  // if(!('tracked_attributes' in queryResponse) || !('explore' in queryResponse)) return;
+
+  // console.log(queryResponse.tracked_attributes)
+
+  // if('result.from_cache' in queryResponse.tracked_attributes && !('explore' in queryResponse)) return;
 
   const newDataHash = stringToHash(visConfig.prompt + visConfig.temperature + visConfig.query +  JSON.stringify(data));
   if (newDataHash === dataHash.value) return;
