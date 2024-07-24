@@ -26,12 +26,12 @@ import { inject, watch, ref, onMounted, onUnmounted } from 'vue';
 import Message from './Message.vue';
 import { useLookerVertexMessage } from './composables/useLookerVertexMessage';
 import { vizConfigSettings } from './constants';
-import { stringToHash, extractNestedValuesGenerator } from './utils';
+import { extractNestedValuesGenerator } from './utils';
 
 const vizConfig = inject('vizConfig');
 const extensionSdk = inject('extensionSdk');
 const sdk = inject('sdk');
-const dataHash = ref(null);
+const dataChanged = ref(null);
 const settingsLoaded = ref(false);
 const { sendMessage, loading, results } = useLookerVertexMessage(sdk);
 
@@ -42,9 +42,11 @@ onMounted(() => {
 
 onUnmounted(() => {
   settingsLoaded.value = false;
+  dataChanged.value = null;
 });
 
 watch(() => vizConfig.value, (newVizConfig) => {
+  console.log("New: ", newVizConfig)
   if (!settingsLoaded.value || !newVizConfig) return;
 
   const { queryResponse, visConfig } = newVizConfig;
@@ -53,10 +55,11 @@ watch(() => vizConfig.value, (newVizConfig) => {
   const { data, fields } = queryResponse;
   if (!data || data.length === 0) return;
 
-  const newDataHash = stringToHash(visConfig.prompt + JSON.stringify(data));
-  if (newDataHash === dataHash.value) return;
+  // if parent id hasn't changed (ie. only viz settings changes) return
+  if(queryResponse.parent_id === dataChanged.value) return;
 
-  dataHash.value = newDataHash;
+  // else (ie. query changed, query run) trigger new call
+  dataChanged.value = queryResponse.parent_id
 
   const { dimensions, measures, pivots, table_calculations } = fields;
   const queryMetadata = {

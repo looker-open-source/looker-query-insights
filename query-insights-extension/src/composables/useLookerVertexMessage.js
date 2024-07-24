@@ -72,8 +72,8 @@ export const useLookerVertexMessage = (core40SDK) => {
   const loading = ref(false);
   const results = ref();
 
-  const VERTEX_BIGQUERY_LOOKER_CONNECTION_NAME = process.env.VUE_APP_VERTEX_BIGQUERY_LOOKER_CONNECTION_NAME || '';
-  const VERTEX_BIGQUERY_MODEL_ID = process.env.VUE_APP_VERTEX_BIGQUERY_MODEL_ID || '';
+  const VERTEX_BIGQUERY_LOOKER_CONNECTION_NAME = process.env.VERTEX_BIGQUERY_LOOKER_CONNECTION_NAME || '';
+  const VERTEX_BIGQUERY_MODEL_ID = process.env.VERTEX_BIGQUERY_MODEL_ID || '';
 
   /**
    * Generates SQL for the Vertex AI model.

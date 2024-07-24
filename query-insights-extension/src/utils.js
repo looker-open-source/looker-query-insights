@@ -21,23 +21,6 @@
 // SOFTWARE.
 
 /**
- * Generates a hash value from a given string.
- * 
- * @param {string} string - The input string to hash.
- * @returns {number} The generated hash value.
- */
-export const stringToHash = (string) => {
-    let hash = 0;
-    if (string.length === 0) return hash;
-    for (let i = 0; i < string.length; i++) {
-      const char = string.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash; // Convert to 32-bit integer
-    }
-    return hash;
-};
-
-/**
  * A generator function that extracts nested values from a complex object structure.
  * 
  * @param {Object} data - The input object containing nested data.
