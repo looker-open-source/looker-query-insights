@@ -4,6 +4,8 @@
 
 The Looker Query Insights Extension is a powerful custom visualization tool designed to summarize and present insights from any query created in a Looker explore. This extension provides a flexible and customizable interface, allowing users to tailor both the model parameters and UI to their specific needs. Inspired by [this awesome Looker Hackathon Project](https://github.com/Juventin/looker_gemini_insight), check it out!
 
+![query insights examples](public/query_insights_examples.png)
+
 ## Features
 
 - Custom visualization for summarized insights
@@ -52,6 +54,7 @@ Getting started involves (in order):
 This Looker Extension is mounted as a Custom Visualization, meaning that once installed you can access it from any Looker Explore as a visualization offering. Additionally it provides two tabs for editing the visualization as an end user: LLM configuration & UI Customization.
 
 ### LLM Configuration
+![llm config](public/llm_config.png)
 
 In the Explore Visualization config, the LLM tab will allow you to customize the prediction request with 3 parameters:
 1. Set Model Temperature (customize variability of reponse)
@@ -59,6 +62,7 @@ In the Explore Visualization config, the LLM tab will allow you to customize the
 3. Set Query Description/Context (pass in any additional user provided context to the prompt sent to the llm)
 
 ### UI Customization
+![viz config](public/viz_config.png)
 
 In the Explore Visualization config, the Display tab will allow you to customize the look and feel of the visualization with 7 parameters: theme color, background color, card color, header color, shadown color, text color, and image url.
 
