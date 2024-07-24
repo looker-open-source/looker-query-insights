@@ -4,7 +4,7 @@
 
 The Looker Query Insights Extension is a powerful custom visualization tool designed to summarize and present insights from any query created in a Looker explore. This extension provides a flexible and customizable interface, allowing users to tailor both the model parameters and UI to their specific needs. Inspired by [this awesome Looker Hackathon Project](https://github.com/Juventin/looker_gemini_insight), check it out!
 
-![query insights examples](public/query_insights_examples.png)
+![query insights examples](public/insight_example.png)
 
 ## Features
 
