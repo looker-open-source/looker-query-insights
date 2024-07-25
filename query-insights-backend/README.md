@@ -16,10 +16,12 @@ This Terraform configuration establishes a backend for the Query Insights Extens
 
 To deploy the BigQuery backend:
 **Replace <PROJECT_ID> in the below script with your GCP project id**
+**Replace <LOOKER BIGQUERY SA> in the below script with the service account email of your Looker instance that will use the connection to Vertex**
 
 ```bash
 cd terraform 
 export TF_VAR_project_id=<PROJECT_ID>
+export TF_VAR_service_account=<LOOKER BIGQUERY SA>
 terraform init
 terraform plan
 terraform apply

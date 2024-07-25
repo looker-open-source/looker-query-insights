@@ -34,7 +34,7 @@ module "bg-backend-project-services" {
 }
 
 resource "time_sleep" "wait_after_apis_activate" {
-  depends_on      = [module.cf-backend-project-services, module.bg-backend-project-services]
+  depends_on      = [module.bg-backend-project-services]
   create_duration = "120s"
 }
 
@@ -51,6 +51,7 @@ module "bigquery_backend" {
   project_id        = var.project_id
   deployment_region = var.deployment_region
   dataset_id        = var.dataset_id_name
+  service_account   = var.service_account
 
   depends_on = [time_sleep.wait_after_apis_activate, google_bigquery_dataset.dataset]
 }

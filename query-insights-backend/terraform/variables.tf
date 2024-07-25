@@ -25,3 +25,7 @@ variable "dataset_id_name" {
     type = string
     default = "query_insights"
 }
+
+variable "bigquery_sa" {
+  type = string
+}

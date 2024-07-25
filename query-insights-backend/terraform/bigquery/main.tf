@@ -10,6 +10,10 @@ variable "dataset_id" {
     type = string
 }
 
+variable "service_account" {
+    type = string
+}
+
 resource "google_bigquery_connection" "connection" {
   connection_id = "query_insights_llm"
   project       = var.project_id
@@ -22,6 +26,13 @@ resource "google_project_iam_member" "bigquery_connection_remote_model" {
   project    = var.project_id
   role       = "roles/aiplatform.user"
   member     = format("serviceAccount:%s", google_bigquery_connection.connection.cloud_resource[0].service_account_id)
+}
+
+# IAM for service account to be able to use remote connection
+resource "google_project_iam_member" "bigquery_connection_user" {
+  project    = var.project_id
+  role       = "roles/bigquery.connectionUser"
+  member     = format("serviceAccount:%s", var.service_account)
 }
 
 resource "google_bigquery_job" "create_bq_model_llm" {
