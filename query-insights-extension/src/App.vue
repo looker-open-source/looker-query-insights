@@ -22,6 +22,7 @@ import { stringToHash, extractNestedValuesGenerator } from './utils';
 
 const vizConfig = inject('vizConfig');
 const extensionSdk = inject('extensionSdk');
+const tileData = inject('tileData')
 const sdk = inject('sdk');
 const dataChanged = ref(null);
 const dataHash = ref(null);
@@ -33,30 +34,24 @@ onMounted(() => {
   settingsLoaded.value = true;
 });
 
+watchEffect(() => console.log("Tile Data: ", tileData.value))
+
 watchEffect(async() =>  {
   if (!settingsLoaded.value || !vizConfig.value) return;
-
+  
   const { queryResponse, visConfig } = vizConfig.value;
   if (!queryResponse || !visConfig) return;
 
-  const { data, fields } = queryResponse;
+  const { data, fields, sql } = queryResponse;
   if (!data || data.length === 0) return;
 
-  // if parent id hasn't changed (ie. only viz settings changes) return
-  if(queryResponse.parent_id === dataChanged.value) return;
+  // if parent id exists (only in explore) and parent id hasn't changed (ie. only viz settings changes) return
+  if('parent_id' in queryResponse && queryResponse.parent_id === dataChanged.value) return;
 
   // else (ie. query changed, query run) trigger new call
   dataChanged.value = queryResponse.parent_id
 
-  // console.log(queryResponse)
-
-  // if(!('tracked_attributes' in queryResponse) || !('explore' in queryResponse)) return;
-
-  // console.log(queryResponse.tracked_attributes)
-
-  // if('result.from_cache' in queryResponse.tracked_attributes && !('explore' in queryResponse)) return;
-
-  const newDataHash = stringToHash(visConfig.prompt + visConfig.temperature + visConfig.query +  JSON.stringify(data));
+  const newDataHash = stringToHash(visConfig.prompt + visConfig.temperature + visConfig.query +  JSON.stringify(data) + sql);
   if (newDataHash === dataHash.value) return;
 
   dataHash.value = newDataHash;

@@ -23,9 +23,11 @@ import { createApp, ref } from 'vue'
 ;(async () => {
   // monitor viz config change
   const updatedVizConfig = ref()
+  const updatedTileData = ref()
   
   // extension setup && viz config data callback
-  const extensionSdk = await connectExtensionHost({visualizationDataReceivedCallback: (data) => updatedVizConfig.value = data})
+  const extensionSdk = await connectExtensionHost({tileHostDataReceivedCallback: (tileData) => updatedTileData.value = tileData,visualizationDataReceivedCallback: (data) => updatedVizConfig.value = data})
+
   const sdk = LookerExtensionSDK40.createClient(extensionSdk)
   
   // create and style root element
@@ -43,5 +45,6 @@ import { createApp, ref } from 'vue'
   app.provide('sdk',sdk)
   app.provide('extensionSdk',extensionSdk)
   app.provide('vizConfig',updatedVizConfig)
+  app.provide('tileData', updatedTileData)
   app.mount('#app')
 })()
