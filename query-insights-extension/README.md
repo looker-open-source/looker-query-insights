@@ -49,9 +49,9 @@ This section describes how to set up the LLM Integration for the Query Insights.
 
    > You may need to update your Node version or use a [Node version manager](https://github.com/nvm-sh/nvm) to change your Node version.
 
-3. Create a new BigQuery connection in Looker that will allow us to get the examples from the database. You will use that in the VERTEX_BIGQUERY_LOOKER_CONNECTION_NAME below.
+3. Create a new BigQuery connection in Looker that will allow us to query Vertex AI (*or reuse and existing BigQuery connection you have in Looker that can access the BQML model created in the Backend setup*). You will use that in the VERTEX_BIGQUERY_LOOKER_CONNECTION_NAME below.
 
-4. Ensure all the appropriate environment variables are set in the `.env` file. There is a .env-examples files in the looker-explore-assitant package, you can edit it and save as .env. 
+4. Ensure all the appropriate environment variables are set in the `.env` file. There is a .env-examples files in the looker-query-insights root, you can edit it and save as .env. 
 
    Regardless of the backend, you're going to need:
 
@@ -67,13 +67,13 @@ This section describes how to set up the LLM Integration for the Query Insights.
 
 5. Start the development server (**Skip this step if you aren't changing the UI code, and proceed to the next step then to deployment**)
    **IMPORTANT** If you are running the extension from a VM or another remote machine, you will need to Port Forward to the machine where you are accessing the Looker Instance from (ie. If you are accessing Looker from your local machine, run the following command there.). Here's a boilerplate example for port forwarding the remote port 8080 to the local port 8080:
-   `ssh username@host -L 8080:localhost:8080`.
+   `ssh username@host -L 3000:localhost:3000`.
 
    ```bash
    npm run start
    ```
 
-   Great! Your extension is now running and serving the JavaScript at https://localhost:8080/bundle.js.
+   Great! Your extension is now running and serving the JavaScript at https://localhost:3000/bundle.js.
 
 ## 3. Looker Extension LookML Project Setup
 
@@ -92,6 +92,11 @@ This section describes how to set up the LLM Integration for the Query Insights.
     label: "Query Insights"
     # url: "https://localhost:3000/bundle.js"
     file: "bundle.js"
+    mount_points: {
+      dashboard_vis: yes
+      dashboard_tile: yes
+      standalone: no
+    }
     entitlements: {
       core_api_methods: ["create_sql_query","run_sql_query","run_query","create_query"]
       navigation: yes
@@ -118,7 +123,7 @@ This section describes how to set up the LLM Integration for the Query Insights.
 
 5. Reload the page and in the left navigation panel click on the Application drop-down. You should see your extension in the list.
 
-6. The extension will load the JavaScript from the `url` provided in the `application` definition if running locally OR from the `file` specified if skipping the local development step. By default, this is https://localhost:8080/bundle.js for `url` and `bundle.js` if `file`. If you change the port your server runs on in the package.json, you will need to also update it in the manifest.lkml.
+6. The extension will load the JavaScript from the `url` provided in the `application` definition if running locally OR from the `file` specified if skipping the local development step. By default, this is https://localhost:3000/bundle.js for `url` and `bundle.js` if `file`. If you change the port your server runs on in the package.json, you will need to also update it in the manifest.lkml.
 
 7. Refreshing the extension page will bring in any new code changes from the extension template, although some changes will hot reload.
 

@@ -14,13 +14,19 @@ The Looker Query Insights Extension is a powerful custom visualization tool desi
 - Seamless integration with Looker, BigQuery, and Vertex AI
 - Flexible frontend and backend architecture
 
-## Technologies
+### Technologies Used
+#### Frontend
+- [Vue](https://vuejs.org/)
+- [Webpack](https://webpack.js.org/).
 
-- **Looker**: Used as the primary platform for data exploration and visualization
-- **BigQuery**: Serves as the data warehouse for storing and querying large datasets
-- **Vertex AI**: Provides advanced machine learning capabilities for generating insights
-- Frontend: [List the main frontend technologies/frameworks used, e.g., React, TypeScript]
-- Backend: [List the main backend technologies/frameworks used, e.g., Python, Flask]
+#### Looker
+- [Looker Extension SDK](https://github.com/looker-open-source/sdk-codegen/tree/main/packages/extension-sdk)
+- [Looker Custom Visualization API](https://github.com/looker/custom_visualizations_v2)
+
+#### Backend API
+- [Google Cloud Platform](https://cloud.google.com/)
+- [Vertex AI](https://cloud.google.com/vertex-ai)
+- [BigQuery Machine Learning](https://cloud.google.com/bigquery/docs/generate-text)
 
 ## Project Structure
 **only highlighting key files**
