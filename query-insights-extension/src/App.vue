@@ -102,7 +102,7 @@ watch(() => vizConfig.value?.visConfig, (newVisConfig) => {
 </script>
 
 <template>
-  <div v-if="!loading && vizConfig">
+  <div class="container" v-if="!loading && vizConfig">
     <Message :message="results" />
   </div>
   <span v-else>Loading Insights...</span>
@@ -113,6 +113,14 @@ body {
   font-family: -apple-system, system-ui, BlinkMacSystemFont, sans-serif;
   text-align: center;
   font-variant-numeric: tabular-nums;
+}
+
+.container {
+  height: 100%;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .center {

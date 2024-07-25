@@ -175,6 +175,8 @@ export const useLookerVertexMessage = (core40SDK) => {
         - if summarize, use the query metadata to understand the nature of the query and then summarize the returned data
         - if predict, use query data and try and predict future values
         - use the user provided context(if any) to further customize and refine your response
+        - the goal is to take the query data and make it readible within a short amount of time, point out areas of interest summarize long time ranges, among other things
+        - don't add next steps, but highlighting key areas of interest is important
         
       Type
       ----------
@@ -209,25 +211,12 @@ export const useLookerVertexMessage = (core40SDK) => {
           - Include relevant units (e.g., $1,234.56, 45%)
 
       Utilize bold text for emphasis on key points or important data.
-      Employ bullet points or numbered lists for clarity:
-          - Use bullet points for unordered lists
-          - Use numbered lists for sequential information or ranked items
-
-      Create tables for structured data comparisons:
-          - Column 1Column 2Column 3Data 1Data 2Data 3
-
-      Use code blocks for any code snippets or technical information:
-          - CopyExample code or technical data here
+      Don't use bullet points, numbered lists, code blocks or tables, keep everything as concise paragraph summaries.
 
       Include blockquotes for notable statements or findings:
           - Important quote or key takeaway
 
       Employ italics for definitions or to provide additional context.
-
-      Use horizontal rules to separate major sections:
-
-      Include hyperlinks when referencing external sources:
-          - Link text
 
       Remember to maintain consistent formatting throughout the summary and use white space effectively to enhance readability.
 

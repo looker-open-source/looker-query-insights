@@ -21,7 +21,7 @@ const isActive = ref(false)
     .icon-container {
         display: flex;
         width: 100%;
-        height:10%;
+        height:auto;
     }
     .hover_shadow {
         transition: box-shadow 0.3s ease-in-out;
