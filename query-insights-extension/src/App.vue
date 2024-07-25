@@ -22,7 +22,6 @@ import { stringToHash, extractNestedValuesGenerator } from './utils';
 
 const vizConfig = inject('vizConfig');
 const extensionSdk = inject('extensionSdk');
-const tileData = inject('tileData')
 const sdk = inject('sdk');
 const dataChanged = ref(null);
 const dataHash = ref(null);
@@ -33,8 +32,6 @@ onMounted(() => {
   extensionSdk.visualizationSDK.configureVisualization(vizConfigSettings);
   settingsLoaded.value = true;
 });
-
-watchEffect(() => console.log("Tile Data: ", tileData.value))
 
 watchEffect(async() =>  {
   if (!settingsLoaded.value || !vizConfig.value) return;

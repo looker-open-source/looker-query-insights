@@ -48,14 +48,22 @@ class UtilsHelper {
 
 /**
  * Formats generator values to a string.
- * @param {Generator} generator - The generator to format.
+ * @param {Object[]} data - Data array.
  * @returns {string} Formatted string of generator values.
  */
-function formatValuesToString(generator) {
+function formatValuesToString(data) {
   // return Array.from(generator).join('\n');
-  return generator.join('\n')
+  return data.join('\n')
 }
 
+/**
+ * 
+ * @param {Generator} - the generator to format
+ * @param {Number} maxRows - max amount of rows 
+ * @param {Number} tokenLimit - model token limit
+ * @param {Number} estimateTokens - estimated amount of tokens in response
+ * @returns 
+ */
 const truncateDataForLLM = (data, maxRows, tokenLimit, estimateTokens) => {
   data = Array.from(data)
   if (data.length <= maxRows) {
@@ -74,7 +82,6 @@ const truncateDataForLLM = (data, maxRows, tokenLimit, estimateTokens) => {
 };
 
 const estimateTokens = (arr) => {
-  // Placeholder implementation
   return arr.reduce((sum, item) => sum + JSON.stringify(item).length, 0);
 };
 
