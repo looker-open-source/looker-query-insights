@@ -26,6 +26,6 @@ variable "dataset_id_name" {
     default = "query_insights"
 }
 
-variable "bigquery_sa" {
+variable "service_account" {
   type = string
 }
