@@ -25,7 +25,7 @@ const isActive = ref(false)
 <template>
   <div class="tweet-container" :class="{ hover_shadow: isActive}" @mouseover="isActive = true" @mouseout="isActive = false">
     <div v-if="vizConfig.visConfig !== undefined" class="icon-container">
-        <img width="5%" height="auto" :src="vizConfig.visConfig.insightImage ?? 'https://img.icons8.com/ios/50/light-on--v1.png'" alt="light-on--v1"/>
+        <img width="18vw" height="20vh" :src="vizConfig.visConfig.insightImage ?? 'https://img.icons8.com/ios/50/light-on--v1.png'" alt="light-on--v1"/>
     </div>
     <div v-if="props.message" class="tweet-content" v-html="marked.parse(props.message.replace(/^```markdown\n/, ''))"></div>
   </div>

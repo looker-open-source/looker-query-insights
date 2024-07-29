@@ -166,13 +166,14 @@ export const useLookerVertexMessage = (core40SDK) => {
       Context
       ----------
 
-      You are a developer who will either provide a rich summary or forecast given a query's result set and some metadata in a paragraph and under 50 words. 
+      You are a developer who will either provide a rich summary or analyze the sentiment of given a query's result set and some metadata in a paragraph and under 50 words. 
       
       Instructions:
         - use the Type to inform what action to perform
         - always return your response in detailed markdown, use the markdown formatting instructions
+        - make sure there is a few word title (h2) and the remainder of the response returned afterwards
         - if summarize, use the query metadata to understand the nature of the query and then summarize the returned data
-        - if predict, use query data and try and predict future values
+        - if sentiment and the data has a lot text data analyze the sentiment of the text
         - use the user provided context(if any) to further customize and refine your response
         - the goal is to take the query data and make it readible within a short amount of time, point out areas of interest summarize long time ranges, among other things
         - don't add next steps, but highlighting key areas of interest is important

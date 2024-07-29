@@ -24,7 +24,7 @@ export const vizConfigSettings = {
     prompt: {
         type: "string",
         label: "2. Set Prompt Type",
-        values: [{ Summary: "summarize" }, { Forecast: "predict" }],
+        values: [{ Summary: "summarize" }, { Sentiment: "sentiment" }],
         display: "radio",
         default: "summarize",
         required: true,
@@ -37,8 +37,16 @@ export const vizConfigSettings = {
         required: false,
         section: 'LLM'
     },
-    themeColor: {
+    title: {
       order: 1,
+      type: "string",
+      label: "Configure Title",
+      display: "text",
+      required: false,
+      section: "Display"
+    },
+    themeColor: {
+      order: 2,
       type: "array",
       label: "Configure Theme Color",
       display: "colors",

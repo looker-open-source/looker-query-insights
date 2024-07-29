@@ -33,6 +33,24 @@ onMounted(() => {
   settingsLoaded.value = true;
 });
 
+function changeTweetTitle(newTitle) {
+  const container = document.querySelector('.tweet-content');
+  if (container) {
+    const h2 = container.querySelector('h2');
+    if (h2) {
+      h2.textContent = newTitle;
+    } else {
+      container.prepend('h2')
+      container.querySelector('h2').textContent = newTitle;
+    }
+  } else {
+    console.error('Container with class "tweet-content" and data-v-0f124b3e attribute not found');
+  }
+}
+
+// Usage example:
+// changeTweetTitle('New Title Here');
+
 watchEffect(async() =>  {
   if (!settingsLoaded.value || !vizConfig.value) return;
   
@@ -75,13 +93,15 @@ watchEffect(async() =>  {
 watch(() => vizConfig.value?.visConfig, (newVisConfig) => {
   if (!newVisConfig) return;
 
-  const { headerColor, backgroundColor, textColor, shadowColor, cardColor } = newVisConfig;
+  const { title, headerColor, backgroundColor, textColor, shadowColor, cardColor } = newVisConfig;
   const root = document.documentElement.style;
   root.setProperty('--color-background', backgroundColor);
   root.setProperty('--color-header', headerColor);
   root.setProperty('--color-card', cardColor);
   root.setProperty('--color-text', textColor);
   root.setProperty('--color-shadow', shadowColor);
+  console.log("Title: ", title)
+  changeTweetTitle(title)
 }, { deep: true });
 </script>
 
@@ -101,7 +121,7 @@ body {
 
 .container {
   height: 100%;
-  width: auto;
+  width: 90%;
   display: flex;
   flex-direction: column;
   justify-content: center;
