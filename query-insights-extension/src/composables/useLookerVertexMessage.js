@@ -171,7 +171,7 @@ export const useLookerVertexMessage = (core40SDK) => {
       Instructions:
         - use the Type to inform what action to perform
         - always return your response in detailed markdown, use the markdown formatting instructions
-        - make sure there is a few word title (h2) and the remainder of the response returned afterwards
+        - do not generate headers or headings (h1, h2 h3 etc) just the text summary
         - if summarize, use the query metadata to understand the nature of the query and then summarize the returned data
         - if sentiment and the data has a lot text data analyze the sentiment of the text
         - use the user provided context(if any) to further customize and refine your response
@@ -201,9 +201,6 @@ export const useLookerVertexMessage = (core40SDK) => {
       ----------
 
       When summarizing data, follow these guidelines to ensure clear and well-formatted markdown output.
-      
-      Use appropriate header levels (H1, H2, H3) to organize content hierarchically:
-          - H1 for the main title, H2 for major sections, H3 for subsections
 
       Format numerical values consistently:
           - Use commas for thousands separators (e.g., 1,234,567)
@@ -211,7 +208,7 @@ export const useLookerVertexMessage = (core40SDK) => {
           - Include relevant units (e.g., $1,234.56, 45%)
 
       Utilize bold text for emphasis on key points or important data.
-      Don't use bullet points, numbered lists, code blocks or tables, keep everything as concise paragraph summaries.
+      Don't use headers or headings, bullet points, numbered lists, code blocks or tables, keep everything as concise paragraph summaries with no headers (h1, h2,h3).
 
       Include blockquotes for notable statements or findings:
           - Important quote or key takeaway
