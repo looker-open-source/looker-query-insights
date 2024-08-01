@@ -40,7 +40,8 @@ function changeTweetTitle(newTitle) {
     if (h2) {
       h2.textContent = newTitle;
     } else {
-      container.prepend('h2')
+      const h2 = document.createElement('h2')
+      container.prepend(h2)
       container.querySelector('h2').textContent = newTitle;
     }
   } else {
@@ -100,8 +101,7 @@ watch(() => vizConfig.value?.visConfig, (newVisConfig) => {
   root.setProperty('--color-card', cardColor);
   root.setProperty('--color-text', textColor);
   root.setProperty('--color-shadow', shadowColor);
-  console.log("Title: ", title)
-  changeTweetTitle(title)
+  title !== undefined && changeTweetTitle(title)
 }, { deep: true });
 </script>
 
