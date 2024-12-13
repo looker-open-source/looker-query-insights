@@ -70,7 +70,7 @@ This section describes how to set up the LLM Integration for the Query Insights.
    `ssh username@host -L 3000:localhost:3000`.
 
    ```bash
-   npm run start
+   npm run develop
    ```
 
    Great! Your extension is now running and serving the JavaScript at https://localhost:3000/bundle.js.
