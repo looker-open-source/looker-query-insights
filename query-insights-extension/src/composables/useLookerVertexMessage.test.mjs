@@ -32,7 +32,7 @@ test('coerces and validates temperature against SQL injection and edge cases', a
   assert.match(stripSingleQuotedLiterals(await captureSQL(0)), /\b0 AS temperature,/);
   assert.match(stripSingleQuotedLiterals(await captureSQL('0.7')), /\b0\.7 AS temperature,/);
 
-  for (const invalid of ['', '   ', null, undefined, NaN, Infinity, -Infinity, true, false, [], {}]) {
+  for (const invalid of ['', '   ', null, undefined, NaN, Infinity, -Infinity, true, false, [], {}, -0.5, 1.5]) {
     assert.match(
       stripSingleQuotedLiterals(await captureSQL(invalid)),
       /\b0\.2 AS temperature,/,

@@ -113,7 +113,7 @@ export const useLookerVertexMessage = (core40SDK) => {
       typeof temperature === 'number' || (typeof temperature === 'string' && temperature.trim() !== '')
         ? Number(temperature)
         : NaN;
-    const safeTemperature = Number.isFinite(parsedTemp) ? parsedTemp : 0.2;
+    const safeTemperature = Number.isFinite(parsedTemp) && parsedTemp >= 0 && parsedTemp <= 1 ? parsedTemp : 0.2;
 
     return `
       SELECT ml_generate_text_llm_result AS generated_content
