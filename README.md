@@ -1,3 +1,6 @@
+> [!WARNING]
+> **Deprecation Notice**: This repository is deprecated and no longer maintained or supported by Looker/Google. It has been archived and made read-only. This functionality has been replaced by native [Conversational Analytics in Looker](https://docs.cloud.google.com/looker/docs/conversational-analytics-overview).
+
 # Looker Query Insights Extension
 
 ## Introduction
