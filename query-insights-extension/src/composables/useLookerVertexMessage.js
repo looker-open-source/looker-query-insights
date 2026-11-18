@@ -109,14 +109,19 @@ export const useLookerVertexMessage = (core40SDK) => {
   const generateSQL = (model_id, prompt, temperature) => {
     const escapedPrompt = UtilsHelper.escapeQueryAll(prompt);
     const subselect = `SELECT '${escapedPrompt}' AS prompt`;
-    
+    const parsedTemp =
+      typeof temperature === 'number' || (typeof temperature === 'string' && temperature.trim() !== '')
+        ? Number(temperature)
+        : NaN;
+    const safeTemperature = Number.isFinite(parsedTemp) && parsedTemp >= 0 && parsedTemp <= 1 ? parsedTemp : 0.2;
+
     return `
       SELECT ml_generate_text_llm_result AS generated_content
       FROM ML.GENERATE_TEXT(
         MODEL \`${model_id}\`,
         (${subselect}),
         STRUCT(
-          ${temperature} AS temperature,
+          ${safeTemperature} AS temperature,
           1024 AS max_output_tokens,
           0.98 AS top_p,
           TRUE AS flatten_json_output,
