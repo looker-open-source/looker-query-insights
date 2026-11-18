@@ -35,14 +35,19 @@ function sanitizeHtml(html) {
     if (!ALLOWED_TAGS.has(node.tagName)) return null;
     const el = doc.createElement(node.tagName.toLowerCase());
     if (node.tagName === 'A') {
-      try {
-        const url = new URL(node.getAttribute('href') || '');
-        if (url.protocol === 'http:' || url.protocol === 'https:') {
-          el.setAttribute('href', url.href);
-          el.setAttribute('rel', 'noopener noreferrer');
-          el.setAttribute('target', '_blank');
-        }
-      } catch (_) {}
+      const href = node.getAttribute('href');
+      if (href) {
+        try {
+          const dummyBase = 'http://relative-base';
+          const url = new URL(href, dummyBase);
+          if (url.protocol === 'http:' || url.protocol === 'https:') {
+            const isRelative = url.origin === dummyBase;
+            el.setAttribute('href', isRelative ? href : url.href);
+            el.setAttribute('rel', 'noopener noreferrer');
+            el.setAttribute('target', '_blank');
+          }
+        } catch (_) {}
+      }
     }
     for (const child of Array.from(node.childNodes)) {
       const copy = clean(child);

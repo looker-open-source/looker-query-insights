@@ -58,7 +58,7 @@ const inputsJson = JSON.stringify({
   mxssAndLinks: [
     '<script>window.__XSS_EXEC = true</script>',
     '<svg onload="window.__XSS_EXEC = true"><style><img src=x onerror="window.__XSS_EXEC = true"></style></svg>',
-    '<a href="javascript:window.__XSS_EXEC=true">raw</a> [bad](javascript:window.__XSS_EXEC=true) [good](https://cloud.google.com/looker)',
+    '<a href="javascript:window.__XSS_EXEC=true">raw</a> [bad](javascript:window.__XSS_EXEC=true) [good](https://cloud.google.com/looker) [relative](/relative/path) [anchor](#anchor)',
   ].join('\n\n'),
   md: '```markdown\n**Revenue** grew *12%*.\n\n> Key takeaway',
 }).replace(/<\//g, '<\\/');
@@ -154,6 +154,8 @@ try {
   assert.ok(!res.mxssAndLinksHtml.includes('<svg'), `<svg> survived: ${res.mxssAndLinksHtml}`);
   assert.ok(!res.mxssAndLinksHtml.includes('javascript:'), `javascript: URI survived: ${res.mxssAndLinksHtml}`);
   assert.ok(res.mxssAndLinksHtml.includes('href="https://cloud.google.com/looker"'), `Safe https link lost: ${res.mxssAndLinksHtml}`);
+  assert.ok(res.mxssAndLinksHtml.includes('href="/relative/path"'), `Relative link lost: ${res.mxssAndLinksHtml}`);
+  assert.ok(res.mxssAndLinksHtml.includes('href="#anchor"'), `Anchor link lost: ${res.mxssAndLinksHtml}`);
   assert.equal(res.errorThrew, false, 'Non-string Error prop threw instead of coercing');
   assert.ok(res.errorCoerced.includes('query failed'), `Error text missing: ${res.errorCoerced}`);
   assert.ok(res.mdHtml.includes('<strong>Revenue</strong>'), `Bold markdown broken: ${res.mdHtml}`);
